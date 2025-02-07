@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DDoS' Cyberpunk Combat Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #00060e;
+            color: #fee801;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 10px #9a9f17;
+            margin: 20px;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: #00060e;
+            padding: 20px;
+            border: 2px solid #54c1e6;
+            color: #fee801;
+            width: 50%;
+            max-height: 70vh;
+            overflow-y: auto;
+            text-align: left;
+            box-shadow: 0 0 15px #54c1e6;
+            font-size: 1rem;
+        }
+
+        .close-popup {
+            color: #fee801;
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .close-popup:hover {
+            color: red;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px;
+            background-color: #00060e;
+            box-shadow: 0 0 10px #39c4b6;
+        }
+
+        th, td {
+            border: 1px solid #54c1e6;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #fee801;
+            color: #00060e;
+        }
+
+        td.health, td.armor {
+            background-color: #9a9f17;
+        }
+
+        td[data-damage] {
+            background-color: #54c1e6;
+        }
+
+        input[type="number"], input[type="text"] {
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        input[type="text"] {
+            width: 8rem;
+        }
+
+        input[type="number"] {
+            width: 4rem;
+        }
+
+        .narrow-column {
+            width: 6rem;
+            padding: 2px;
+        }
+
+        .narrow-column input[type="checkbox"] {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        th.narrow-column {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        button {
+            background-color: #fee801;
+            border: none;
+            color: #00060e;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 0 5px #9a9f17;
+        }
+
+        button:hover {
+            box-shadow: 0 0 15px #9a9f17;
+        }
+
+        .delete-button {
+            background-color: #fee801;
+            border: none;
+            cursor: pointer;
+            padding: 2px;
+            font-size: 1.2rem;
+        }
+
+        .delete-button:hover {
+            color: #ff0000;
+        }
+
+        @media screen and (max-width: 768px) {
+            table {
+                width: 100%;
+                font-size: 0.8rem;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            input[type="number"], input[type="text"] {
+                width: 3rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>DDoS' Cyberpunk Combat Tracker v1.0</h1>
+    <div>
+        <button id="addCharacter">Add Character</button>
+        <button id="exportData">Save Session</button>
+        <button id="importData">Load Session</button>
+        <input type="file" id="fileInput" style="display: none;" accept=".json">
+        <button id="helpButton" style="background-color: #54c1e6; color: #00060e;">Help</button>
+    </div>
+
+    <div id="helpPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <h2>About my Combat Tracker</h2>
+            <p>
+                Peace choom, my name's DDoS. Sometimes, when I'm not busy netrunning or writing malware, I'm a game master for <strong>Cyberpunk RED</strong>.
+                And since I know how chaotic combat can get, I coded this combat tracker to help you keep your sessions running smoothly.
+                Use it well, and <strong>don't get flatlined.</strong>
+            </p>
+        
+            <h3>How do you install it?</h3>
+            <p>
+                That's the neat part. <strong>You don't.</strong> Just open this .html file in your browser, and you're good to go.
+                Code's clean. I promise I didn't inject any Black ICE this time.
+            </p>
+        
+            <h3>How to Use This Tracker</h3>
+            <p>Let's break it down so you can focus on zeroing gonks instead of fumbling with spreadsheets.</p>
+            <ol>
+                <li>Click the <strong>"Add Character"</strong> button to add as many characters as you need.</li>
+                <li>Roll Initiative, enter the values, and click <strong>"Sort"</strong> to order the characters. Duh.</li>
+                <li>Enter damage in the <strong>"Damage"</strong> field and click <strong>"Apply"</strong> to track it. HP and armor values auto-update.</li>
+                <li>Use checkboxes to manage armor and effects:
+                    <ul>
+                        <li><strong>Half Armor</strong>: Reduces SP by 50% (rounded up) for damage calculation.</li>
+                        <li><strong>Ignore Armor</strong>: Bypass SP completely.</li>
+                        <li><strong>Headshots</strong>: Double damage. Double the pain. Uses head SP of course, which is reduced afterwards.</li>
+                        <li><strong>Critical</strong>: Rolled two sixes? +5 damage, no matter if armor is penetrated or not.</li>
+                        <li><strong>Armor Piercing</strong>: Lowers SP by an extra 1. I know, some weapons ablate armor even more,
+                            but for those rare edge-cases you can adjust SP manually.</li>
+                    </ul>
+                </li>
+                <li>Keep notes in the <strong>"Notes"</strong> column. Track cyberware, critical injuries, status effects, grenades, or plot armor.</li>
+                <li>Toggle stats with the <strong>Show/Hide</strong> checkboxes. Some GMs don't roll Death Saves for NPCs. Others don't have their NPCs reload their mags. Just hide what you don't need.</li>
+                <li>Click the <span style="color: red;">🗑️</span> button to delete a character after you zero them.</li>
+            </ol>
+        
+            <h3>Le Epic Feature:</h3>
+            <p>
+                Use <strong>"Save Session"</strong> and <strong>"Load Session"</strong> to save and load combat encounters.
+                Why is this so epic?
+            </p>
+            <ul>
+                <li><strong>Pre-plan combat encounters</strong>: Prepare your combat encounters before the session and load them the exact moment when combat begins. No more "hold on I need to set up the enemies" moments.</li>
+                <li><strong>Pause and resume sessions</strong>: It's already past midnight and you need to get up early tomorrow. Save your current encounter and continue it next time. No need to rush or forget where you left off.</li>
+            </ul>
+        
+            <h3>That's it.</h3>
+            <p>Now go out there and <span style="color: red;">burn corpo shit.</span></p>
+        
+            <h3>Contact</h3>
+            <p>Got questions? Hit me up at: <a href="mailto:dimi.ko@web.de" style="color: #54c1e6;">dimi.ko@web.de</a></p>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Initiative<br><button id="sortButton" style="background-color: #54c1e6; color: #00060e;">Sort</button></th>
+                <th>Name</th>
+                <th class="toggle-column" data-column="move">MOVE</th>
+                <th class="toggle-column" data-column="body">BODY</th>
+                <th class="toggle-column" data-column="deathSave">Death Save</th>
+                <th class="toggle-column" data-column="magazine">Magazine</th>
+                <th class="toggle-column" data-column="atk">ATK</th>
+                <th class="toggle-column" data-column="eva">EVA</th>
+                <th class="health">HP</th>
+                <th class="armor">SP Head</th>
+                <th class="armor">SP Body</th>
+                <th data-damage>Damage</th>
+                <th class="narrow-column">Half<br>Armor</th>
+                <th class="narrow-column">Ignore<br>Armor</th>
+                <th class="narrow-column">Headshot</th>
+                <th class="narrow-column">Critical</th>
+                <th class="narrow-column">Armor<br>Piercing</th>
+                <th class="toggle-column" data-column="notes">Notes</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="characterTable">
+        </tbody>
+    </table>
+    <div style="margin: 20px;">
+        <strong>Show/Hide:</strong>
+        <label><input type="checkbox" id="toggleMove" checked> MOVE</label>
+        <label><input type="checkbox" id="toggleBody" checked> BODY</label>
+        <label><input type="checkbox" id="toggleDeathSave" checked> Death Save</label>
+        <label><input type="checkbox" id="toggleMagazine" checked> Magazine</label>
+        <label><input type="checkbox" id="toggleAtk" checked> ATK</label>
+        <label><input type="checkbox" id="toggleEva" checked> EVA</label>
+        <label><input type="checkbox" id="toggleNotes" checked> Notes</label>
+    </div>
+    <script>
+        let characters = [];
+
+        let columnVisibility = {
+            move: true,
+            body: true,
+            deathSave: true,
+            magazine: true,
+            atk: true,
+            eva: true,
+            notes: true
+        };
+
+
+        document.getElementById('addCharacter').addEventListener('click', () => {
+            characters.push({
+                initiative: '',
+                name: '',
+                move: '',
+                body: '',
+                deathSave: 0,
+                magazine: 0,
+                atk: '',
+                eva: '',
+                hp: '',
+                spHead: '',
+                spBody: '',
+                notes: ''
+            });
+            renderTable();
+        });
+
+        document.getElementById('exportData').addEventListener('click', () => {
+            const dataStr = JSON.stringify(characters, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'combat_tracker_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importData').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if (Array.isArray(importedData)) {
+                            characters = importedData;
+                            renderTable();
+                        } else {
+                            alert('Invalid file format.');
+                        }
+                    } catch (error) {
+                        alert('Error reading file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        document.getElementById('helpButton').addEventListener('click', function () {
+            document.getElementById('helpPopup').style.display = "flex";
+        });
+
+        document.querySelector('.close-popup').addEventListener('click', function () {
+            document.getElementById('helpPopup').style.display = "none";
+        });
+
+        window.addEventListener('click', function (event) {
+            if (event.target === document.getElementById('helpPopup')) {
+                document.getElementById('helpPopup').style.display = "none";
+            }
+        });
+
+
+        document.getElementById('sortButton').addEventListener('click', () => {
+            characters.sort((a, b) => b.initiative - a.initiative);
+            renderTable();
+        });
+
+        document.getElementById('toggleMove').addEventListener('change', () => toggleColumn('move'));
+        document.getElementById('toggleBody').addEventListener('change', () => toggleColumn('body'));
+        document.getElementById('toggleDeathSave').addEventListener('change', () => toggleColumn('deathSave'));
+        document.getElementById('toggleMagazine').addEventListener('change', () => toggleColumn('magazine'));
+        document.getElementById('toggleAtk').addEventListener('change', () => toggleColumn('atk'));
+        document.getElementById('toggleEva').addEventListener('change', () => toggleColumn('eva'));
+        document.getElementById('toggleNotes').addEventListener('change', () => toggleColumn('notes'));
+
+        function toggleColumn(columnClass) {
+            columnVisibility[columnClass] = !columnVisibility[columnClass];
+            applyColumnVisibility();
+        }
+
+        function applyColumnVisibility() {
+            const columns = document.querySelectorAll(`.toggle-column[data-column]`);
+            columns.forEach((column) => {
+                const columnClass = column.getAttribute('data-column');
+                column.style.display = columnVisibility[columnClass] ? 'table-cell' : 'none';
+            });
+        }
+
+        function renderTable() {
+    const tableBody = document.getElementById('characterTable');
+    tableBody.innerHTML = '';
+
+    characters.forEach((char, index) => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td><input type="number" value="${char.initiative}" onchange="updateCharacter(${index}, 'initiative', this.value)"></td>
+            <td><input type="text" value="${char.name}" onchange="updateCharacter(${index}, 'name', this.value)"></td>
+            <td class="toggle-column" data-column="move"><input type="number" value="${char.move}" onchange="updateCharacter(${index}, 'move', this.value)"></td>
+            <td class="toggle-column" data-column="body"><input type="number" value="${char.body}" onchange="updateCharacter(${index}, 'body', this.value)"></td>
+             <td class="toggle-column" data-column="deathSave">
+                <input type="number" value="${char.deathSave}" id="deathSave-${index}" 
+                    onchange="updateCharacter(${index}, 'deathSave', this.value)">
+                <button onclick="incrementDeathSave(${index})">+1</button>
+            </td>
+            <td class="toggle-column" data-column="magazine">
+                <input type="number" value="${char.magazine}" id="magazine-${index}" 
+                    onchange="updateCharacter(${index}, 'magazine', this.value)">
+                <button onclick="decrementMagazine(${index})">-1</button>
+            </td>
+            <td class="toggle-column" data-column="atk"><input type="number" value="${char.atk}" onchange="updateCharacter(${index}, 'atk', this.value)"></td>
+            <td class="toggle-column" data-column="eva"><input type="number" value="${char.eva}" onchange="updateCharacter(${index}, 'eva', this.value)"></td>
+            <td class="health"><input type="number" value="${char.hp}" onchange="updateCharacter(${index}, 'hp', this.value)"></td>
+            <td class="armor"><input type="number" value="${char.spHead}" onchange="updateCharacter(${index}, 'spHead', this.value)"></td>
+            <td class="armor"><input type="number" value="${char.spBody}" onchange="updateCharacter(${index}, 'spBody', this.value)"></td>
+            <td data-damage>
+                <input type="number" value="0" id="damage-${index}">
+                <button onclick="confirmDamage(${index})">Apply</button>
+            </td>
+            <td class="narrow-column"><input type="checkbox" id="half-${index}"></td>
+            <td class="narrow-column"><input type="checkbox" id="ignore-${index}"></td>
+            <td class="narrow-column"><input type="checkbox" id="headshot-${index}"></td>
+            <td class="narrow-column"><input type="checkbox" id="critical-${index}"></td>
+            <td class="narrow-column"><input type="checkbox" id="armorPiercing-${index}"></td>
+            <td class="toggle-column" data-column="notes">
+               <input type="text" value="${char.notes || ''}" onchange="updateCharacter(${index}, 'notes', this.value)">
+            </td>
+            <td><button class="delete-button" onclick="deleteCharacter(${index})">🗑️</button></td>
+        `;
+
+        tableBody.appendChild(row);
+    });
+
+    applyColumnVisibility();
+}
+
+        function updateCharacter(index, key, value) {
+            characters[index][key] = value;
+        }
+
+        function confirmDamage(index) {
+            const damageInput = document.getElementById(`damage-${index}`).value;
+            const damage = parseInt(damageInput) || 0;
+            const isHalf = document.getElementById(`half-${index}`).checked;
+            const isIgnore = document.getElementById(`ignore-${index}`).checked;
+            const isHeadshot = document.getElementById(`headshot-${index}`).checked;
+            const isCritical = document.getElementById(`critical-${index}`).checked;
+            const isArmorPiercing = document.getElementById(`armorPiercing-${index}`).checked;
+
+            let sp = isHeadshot ? characters[index].spHead : characters[index].spBody;
+            const spEffective = isIgnore ? 0 : (isHalf ? Math.ceil(sp / 2) : sp);
+
+            const penetration = damage > spEffective;
+            const remainingDamage = penetration ? damage - spEffective : 0;
+
+            if (!isIgnore && penetration) {
+                if (isArmorPiercing) {
+                    if (isHeadshot) {
+                        characters[index].spHead = Math.max(0, sp - 2);
+                    } else {
+                        characters[index].spBody = Math.max(0, sp - 2);
+                    }
+                } else {
+                    if (isHeadshot) {
+                        characters[index].spHead = Math.max(0, sp - 1);
+                    } else {
+                        characters[index].spBody = Math.max(0, sp - 1);
+                    }
+                }
+            }
+
+            if (isHeadshot) {
+                characters[index].hp -= remainingDamage * 2;
+            } else {
+                characters[index].hp -= remainingDamage;
+            }
+
+            if (isCritical) {
+                characters[index].hp -= 5;
+            }
+
+            renderTable();
+        }
+
+        function incrementDeathSave(index) {
+            const deathSaveInput = document.getElementById(`deathSave-${index}`);
+            deathSaveInput.value = parseInt(deathSaveInput.value) + 1;
+            characters[index].deathSave = parseInt(deathSaveInput.value);
+        }
+
+
+        function decrementMagazine(index) {
+            const magazineInput = document.getElementById(`magazine-${index}`);
+            magazineInput.value = Math.max(0, parseInt(magazineInput.value) - 1);
+            characters[index].magazine = parseInt(magazineInput.value);
+        }
+
+        function deleteCharacter(index) {
+            characters.splice(index, 1);
+            renderTable();
+        }
+    </script>
+</body>
+</html>
