@@ -37,3 +37,5 @@ Pause and resume sessions: It's already past midnight and you need to get up ear
 That's it. Now go out there and burn corpo shit.
 
 Found a bug? Or have a feature request? Hit me up.
+
+Special thanks to DonTroller and u/RY5K
