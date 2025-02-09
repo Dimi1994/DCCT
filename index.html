@@ -237,7 +237,7 @@
 <body>
     <h1>DDoS' Cyberpunk Combat Tracker v1.1</h1>
     <div>
-        <button id="addCharacter">Add Character</button>
+        <button id="addCharacter">New Character</button>
         <button id="loadCharacter">Load Character</button>
         <input type="file" id="characterFileInput" style="display: none;" accept=".json">
         <button id="exportData">Save Session</button>
@@ -251,25 +251,27 @@
             <span class="close-popup" onclick="closeHelpPopup()">&times;</span>
             <h2>About my Combat Tracker</h2>
             <p>
-                Peace choom, my name's DDoS. Sometimes, when I'm not busy netrunning or writing malware, I'm a game
-                master for <strong>Cyberpunk RED</strong>.
-                And since I know how chaotic combat can get, I coded this combat tracker to help you keep your sessions
-                running smoothly.
+                Peace choom, my name's DDoS. Sometimes, when I'm not busy netrunning or writing malware,
+                I'm a game master for Cyberpunk RED. And since I know how chaotic combat can get, I coded
+                this combat tracker to help you keep your sessions running smoothly.
                 Use it well, and <strong>don't get flatlined.</strong>
             </p>
 
-            <h3>How do you install it?</h3>
+            <h3>How do I install it?</h3>
             <p>
-                That's the neat part. <strong>You don't.</strong> Just open this .html file in your browser, and you're
-                good to go.
-                Code's clean. I promise I didn't inject any Black ICE this time.
+                That's the neat part. <strong>You don't.</strong> You either go to https://dimi1994.github.io/DDoS-CCT/
+                or you just download this .html file, open it in your browser, and you're good to go. Code's clean.
+                Promise I didn't inject any Black ICE this time. What I find so convenient about this is, that,
+                if you already use your corebooks and character sheets in your browser, the Combat Tracker is just another tab.
             </p>
 
             <h3>How to Use This Tracker</h3>
             <p>Let's break it down so you can focus on zeroing gonks instead of fumbling with spreadsheets.</p>
             <ol>
-                <li>Click the <strong>"Add Character"</strong> button to add as many characters as you need.</li>
-                <li>Roll Initiative, enter the values, and click <strong>"Sort"</strong> to order the characters. Duh.
+                <li>Click the <strong>"New Character"</strong> button to create as many characters as you need.
+                    Alternatively, load a preciously saved character.
+                </li>
+                <li>Roll Initiative, enter the values, and click <strong>"Sort"</strong> to order the initiative queue.
                 </li>
                 <li>Enter damage in the <strong>"Damage"</strong> field and click <strong>"Apply"</strong> to track it.
                     HP and armor values auto-update.</li>
@@ -278,28 +280,35 @@
                         <li><strong>Half Armor</strong>: Reduces SP by 50% (rounded up) for damage calculation.</li>
                         <li><strong>Ignore Armor</strong>: Bypass SP completely.</li>
                         <li><strong>Headshots</strong>: Double damage. Double the pain. Uses head SP of course, which is
-                            reduced afterwards.</li>
+                            reduced afterwards.
+                        </li>
                         <li><strong>Critical</strong>: Rolled two sixes? +5 damage, no matter if armor is penetrated or
-                            not.</li>
+                            not.
+                        </li>
                         <li><strong>Armor Piercing</strong>: Lowers SP by an extra 1. I know, some weapons ablate armor
-                            even more,
-                            but for those rare edge-cases you can adjust SP manually.</li>
+                            even more, but for those rare edge-cases you can adjust SP manually
+                            (just like any other stat, by the way!).
+                        </li>
                     </ul>
                 </li>
-                <li>Keep notes in the <strong>"Notes"</strong> column. Track cyberware, critical injuries, status
-                    effects, grenades, or plot armor.</li>
+                <li>Keep notes in the <strong>"Notes"</strong> column. Track cyberware, status effects, grenades,
+                    or plot armor. Critical injuries can be added from a List.
+                </li>
                 <li>Toggle stats with the <strong>Show/Hide</strong> checkboxes. Some GMs don't roll Death Saves for
-                    NPCs. Others don't have their NPCs reload their mags. Just hide what you don't need.</li>
-                <li>Click the <span style="color: red;">🗑️</span> button to delete a character after you zero them.</li>
-                <li>Duplicate a character with <span style="color: red;">📄</span></li>
-                <li>Export a character with <span style="color: red;">💾</span></li>
+                    NPCs. Others don't have their NPCs reload their mags. Just hide what you don't need.
+                </li>
+                <li>Click the <span style="color: red;">❌</span> button to delete a character after you zero them.
+                </li>
+                <li>Duplicate a character with <span style="color: red;">📄</span>
+                </li>
+                <li>Export a character with <span style="color: red;">💾</span>
+                </li>
             </ol>
 
             <h3>Le Epic Feature:</h3>
             <p>
                 Use <strong>"Save Session"</strong> and <strong>"Load Session"</strong> to save and load combat
-                encounters.
-                Why is this so epic?
+                encounters. Why is this so epic?
             </p>
             <ul>
                 <li><strong>Pre-plan combat encounters</strong>: Prepare your combat encounters before the session and
