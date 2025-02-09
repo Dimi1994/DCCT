@@ -32,8 +32,8 @@ Let's break it down so you can focus on zeroing gonks instead of fumbling with s
 ## Le Epic Feature
 
 Use "Save Session" and "Load Session" to save and load combat encounters. Why is this so epic?
-Pre-plan combat encounters: Prepare your combat encounters before the session and load them the exact moment when combat begins. No more "hold on I need to set up the enemies" moments.
-Pause and resume sessions: It's already past midnight and you need to get up early tomorrow. Save your current encounter and continue it next time. No need to rush or forget where you left off.
+- Pre-plan combat encounters: Prepare your combat encounters before the session and load them the exact moment when combat begins. No more "hold on I need to set up the enemies" moments.
+- Pause and resume sessions: It's already past midnight and you need to get up early tomorrow. Save your current encounter and continue it next time. No need to rush or forget where you left off.
 
 ## That's it
 Now go out there and burn corpo shit.
