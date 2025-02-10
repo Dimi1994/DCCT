@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DDoS' Cyberpunk Combat Tracker</title>
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAATElEQVR4nGP894KRgZaAiaamj1owasGoBaMWEAdYiFQXdvMpnL1KXZp4C0jzAcRoZMuobAEZYKRZAAl9kiKZcbTKHLVg1IJRC0aCBQBP6A0PeaoAvgAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAvElEQVR4nO2V0Q3DMAhEoepamT5zdBbyZYmcfcZt5aJKnJQf7JgXTDi1l5gk6pGZvAAKoABERJ4Y0PM+FuzQLtbikUZnoWgF2mY97faij/tE7cHkdugU9usr8IkQzMMxiG09gF8+usatAFgZug/N6JMm9OvsKhhIB/Brpc+BAiiAdIDOjFDsf2aTDRUNomkF2DRj8ZFpRQorEB04S7QCkd4DywDo91F8+dzIC0ZGw+KrBvQWwG79Tw8UwC5d0StnTKynkwIAAAAASUVORK5CYII=">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -232,6 +232,25 @@
                 font-size: 0.8rem;
             }
         }
+
+        input[type="checkbox"] {
+            accent-color: #54C1E6;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .show-hide-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .show-hide-container label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
     </style>
 </head>
 
@@ -376,7 +395,7 @@
         <tbody id="characterTable">
         </tbody>
     </table>
-    <div style="margin: 20px;">
+    <div class="show-hide-container">
         <strong>Show/Hide:</strong>
         <button id="toggleAllColumns">All</button>
         <label><input type="checkbox" id="toggleMove" checked> MOVE</label>
